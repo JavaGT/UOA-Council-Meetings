@@ -6,6 +6,9 @@ import { parse as parsePath } from 'path';
 import { promises as fsp } from 'fs'
 import { getInfo } from 'ytdl-getinfo'
 
+// make directories
+await fsp.mkdir('./data/youtube_transcripts', { recursive: true })
+
 const parseAttr = (attr) => (x) => x[attr]
 const pause = (t) => new Promise(r => setTimeout(r, t))
 

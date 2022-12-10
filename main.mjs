@@ -46,6 +46,7 @@ async function getYoutubeData() {
         console.log(`Fetching video data for ${id}`)
         const playlist = await getInfo(url)
         const info = playlist.items[0]
+        delete info.formats
 
         // Transcripts
         console.log(`Fetching transcript for ${id}`)

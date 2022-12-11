@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+  </head>
+  <body>
+    <style>
+      body {
+        font-family: sans-serif;
+        grid-template-columns: 1fr min(65rem, 90%) 1fr;
+      }
+      #results {
+        padding: 1rem;
+      }
+      .result {
+        /* border-radius: 1em; */
+        padding: 10px;
+        /* background-color: rgba(0, 0, 0, 0.05); */
+        margin: 1rem 0;
+        /* max-height: 10rem; */
+        width: 100%;
+        display: flex;
+        overflow: hidden;
+        box-sizing: border-box;
+        text-decoration: none;
+        border-bottom: 1px solid var(--accent);
+      }
+      .thumbnail {
+        max-height: 8em;
+        max-width: 8em;
+        object-fit: contain;
+        display: inline-block;
+      }
+      .details {
+        padding: 1rem;
+        display: inline-block;
+        /* height: 100px; */
+        vertical-align: top;
+        /* color: black; */
+      }
+      .highlight {
+        background-color: var(--accent);
+        color: black;
+        padding: 0.2rem;
+      }
+    </style>
+    <a href="/"><h1>Search UOA Council Transcripts</h1></a>
+    <form action="/" method="GET">
+      <input type="text" name="query" placeholder="Search..." />
+      <input type="submit" value="Search" />
+    </form>
+    <div id="results">
+      <span class="highlight"> Searching...</span>
+    </div>
+    <script src="client.mjs" type="module"></script>
+  </body>
+</html>

@@ -38,12 +38,13 @@ async function getYoutubeData() {
     console.log(`Found ${new_ids.length} new videos`)
 
     const video_data = await new_ids.reduce(async (acc, id) => {
-        await acc
+        const existing_data = await acc
         console.log(`Waiting 1 second`)
         pause(1000)
 
         // Video data
         console.log(`Fetching video data for ${id}`)
+        const url = `https://www.youtube.com/watch?v=${id}`
         const playlist = await getInfo(url)
         const info = playlist.items[0]
         delete info.formats
@@ -54,7 +55,7 @@ async function getYoutubeData() {
 
         const video_data = { info, transcript }
 
-        return { ...(await acc), [id]: video_data }
+        return { ...existing_data, [id]: video_data }
     }, Promise.resolve({}))
 
     await Object.entries(video_data).reduce(async (acc, [id, data]) => {
@@ -62,4 +63,27 @@ async function getYoutubeData() {
         console.log(`Writing transcript for ${id}`)
         await fsp.writeFile(`./data/youtube_transcripts/${id}.json`, JSON.stringify(data, null, 2))
     }, Promise.resolve())
+
+    // Read transcript files
+    const transcript_files = await fsp.readdir('./data/youtube_transcripts')
+    // filter out non json files
+    const transcript_files_json = transcript_files.filter(x => x.endsWith('.json'))
+    // read files
+    console.log(transcript_files_json)
+    const file_data = await Promise.all(transcript_files_json.map(async file => {
+        console.log(`Reading transcript file ${file}`)
+        const data = await fsp.readFile(`./data/youtube_transcripts/${file}`)
+        return JSON.parse(data)
+    }))
+
+    console.log(JSON.stringify(file_data, null, 2))
+
+    const metadata = Object.fromEntries(file_data.map(x => x.info).map(x => [x.id, x]))
+    const transcripts = file_data.map(filedata => filedata.transcript.map((x, i, all) => {
+        const context = all.slice(i, i + 4).map(x => x.text).join(' ')
+        return { ...x, video_id: filedata.info.id, context: context }
+    })).flat()
+
+    await fsp.writeFile(`./data/youtube_metadata.json`, JSON.stringify(metadata, null, 2))
+    await fsp.writeFile(`./data/youtube_transcripts.json`, JSON.stringify(transcripts, null, 2))
 }

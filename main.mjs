@@ -12,14 +12,21 @@ await fsp.mkdir('./data/youtube_transcripts', { recursive: true })
 const parseAttr = (attr) => (x) => x[attr]
 const pause = (t) => new Promise(r => setTimeout(r, t))
 
-await getYoutubeData()
 
-async function getYoutubeData() {
-    const url = 'https://www.auckland.ac.nz/en/about-us/about-the-university/the-university/governance-and-committees/university-council/university-council-agenda-and-minutes.html'
-    const html = await fetch(url).then(res => res.text());
+const url = 'https://www.auckland.ac.nz/en/about-us/about-the-university/the-university/governance-and-committees/university-council/university-council-agenda-and-minutes.html'
+const html = await fetch(url).then(res => res.text());
 
-    const document = parseHTML(html);
+const document = parseHTML(html);
 
+await getMinutesData(document)
+await getYoutubeData(document)
+
+async function getMinutesData(document) {
+    const minutes_selector = `[href="^/content/dam/uoa/auckland/about-us/the-university/governance-and-committees/university-council/minutes/"]`
+    // TODO: download and parse minutes for searching.
+}
+
+async function getYoutubeData(document) {
     const urls = document.querySelectorAll('[src^="https://www.youtube.com/embed/"]').map(x => x.getAttribute('src'))
 
     const ids = urls

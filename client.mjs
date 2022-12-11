@@ -3,33 +3,26 @@ import { create, search, insertBatch } from "https://unpkg.com/@lyrasearch/lyra@
 const urlParams = new URLSearchParams(window.location.search);
 const query = urlParams.get('query');
 document.querySelector('input[name="query"]').value = query;
-
-const db = create({
-    schema: {
-        "text": "string",
-        "context": "string",
-        "duration": "number",
-        "offset": "number",
-        "video_id": "string"
-    },
-});
-
-// load data
-const metadata = await fetch('./data/youtube_metadata.json').then(x => x.json())
-const transcripts = await fetch('./data/youtube_transcripts.json').then(x => x.json())
-
-await insertBatch(db, transcripts);
-
-// search
-
-// <form action="/" method="GET">
-//     <input type="text" name="query" placeholder="Search...">
-//     <input type="submit" value="Search">
-// </form>
-// <div id="results"></div>
-
+if (query) {
+    document.querySelector('#results').innerHTML = '<span class="highlight">Searching...</span>';
+}
 
 if (query) {
+    const db = create({
+        schema: {
+            "text": "string",
+            "context": "string",
+            "duration": "number",
+            "offset": "number",
+            "video_id": "string"
+        },
+    });
+
+    // load data
+    const metadata = await fetch('./data/youtube_metadata.json').then(x => x.json())
+    const transcripts = await fetch('./data/youtube_transcripts.json').then(x => x.json())
+
+    await insertBatch(db, transcripts);
     const searchResult = search(db, {
         term: query,
         properties: ["text", "context"],

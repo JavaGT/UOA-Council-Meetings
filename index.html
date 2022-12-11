@@ -18,9 +18,8 @@
       }
       .result {
         /* border-radius: 1em; */
-        padding: 10px;
+        padding: 1.5rem;
         /* background-color: rgba(0, 0, 0, 0.05); */
-        margin: 1rem 0;
         /* max-height: 10rem; */
         width: 100%;
         display: flex;
@@ -28,6 +27,9 @@
         box-sizing: border-box;
         text-decoration: none;
         border-bottom: 1px solid var(--accent);
+      }
+      .result:hover {
+        background-color: rgba(255, 255, 255, 0.05);
       }
       .thumbnail {
         max-height: 8em;
@@ -51,7 +53,11 @@
     <a href="./"><h1>Search UOA Council Transcripts</h1></a>
     <p>
       This is a simple search engine for the University of Auckland Council
-      transcripts. You can find the sources for the data <a href="https://www.auckland.ac.nz/en/about-us/about-the-university/the-university/governance-and-committees/university-council/university-council-agenda-and-minutes.html">here</a>.
+      transcripts. You can find the sources for the data
+      <a
+        href="https://www.auckland.ac.nz/en/about-us/about-the-university/the-university/governance-and-committees/university-council/university-council-agenda-and-minutes.html"
+        >here</a
+      >.
     </p>
     <form action="./" method="GET">
       <input type="text" name="query" placeholder="Search..." />
